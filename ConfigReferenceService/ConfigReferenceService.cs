@@ -65,18 +65,12 @@ namespace ConfigRefs
             }
         }
 
-        public System.Type[] ValidConfigTypes;
-
 #if UNITY_EDITOR
-        // [System.NonSerialized]
-        // private static readonly System.Type[] ValidConfigTypes = new System.Type[]
-        // {
-        //         typeof(DataObject),
-        //         typeof(AssetBundleData),
-        //         typeof(InstancedSceneData),
-        //         typeof(StreamingSceneMetadata),
-        //         typeof(StreamingSceneData),
-        // };
+        [System.NonSerialized]
+        private static readonly System.Type[] ValidConfigTypes = new System.Type[]
+        {
+                typeof(ScriptableObject),
+        };
 
         public void EditorRescanConfigs()
         {
@@ -99,19 +93,6 @@ namespace ConfigRefs
 
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
-        }
-
-        [MenuItem("ZR/Data/ConfigRefs/Refresh Base Configs")]
-        public static void EditorAutoRescanConfigs()
-        {
-            var configService = AssetDatabaseE.FindSingletonAsset<ConfigReferenceService>();
-            if (configService == null)
-            {
-                Debug.LogError("Couldn't find Bootstrap's config service!");
-                return;
-            }
-
-            configService.EditorRescanConfigs();
         }
 
         public void EditorEnsureConfig<T>(ConfigReference<T> configReference) where T : ScriptableObject
